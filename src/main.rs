@@ -94,7 +94,7 @@ async fn main() -> Result<()> {
       drop(child);
     },
     st = child.wait() => {
-      warn!("child process exited with {}", st?);
+      info!("child process exited with {}", st?);
       let options = etcd::ResignOptions::new()
         .with_leader(leaderkey);
       client.resign(Some(options)).await?;
@@ -114,7 +114,7 @@ async fn lease_keeper(
 
   let (mut keeper, mut stream) = client.keep_alive(lease).await?;
   loop {
-    let sleep_dur = Duration::from_secs((ttl / 2) as u64);
+    let sleep_dur = Duration::from_millis((ttl * 1000 / 2) as u64);
     tokio::select! {
       _ = tokio::time::sleep(sleep_dur) => {
         debug!("Keep alive");
