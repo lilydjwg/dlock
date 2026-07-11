@@ -1,0 +1,14 @@
+[package]
+name = "dlock"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "*", default-features = false, features = ["std", "derive", "help", "usage", "error-context"] }
+etcd-client = { version = "*", features = ["tls"] }
+eyre = "*"
+tokio = { version = "*", features = ["macros", "rt", "process", "time"] }
+lilysetup = { version = "*", path = "../lilysetup" }
+toml = { version = "*", features = ["serde"] }
+serde = { version = "*", features = ["derive"] }
+libc = "*"

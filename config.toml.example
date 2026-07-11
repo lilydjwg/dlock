@@ -1,0 +1,13 @@
+lockname = "test"
+endpoints = [
+  "https://a.example.org:2379",
+  "https://b.example.org:2379",
+  "https://c.example.org:2379",
+]
+
+[cert]
+cert = "/path/to/cert.pem"
+key = "/path/to/cert-key.pem"
+ca = "/path/to/ca.pem"
+
+# vim: se ft=toml:
