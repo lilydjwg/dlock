@@ -85,7 +85,7 @@ async fn main() -> Result<()> {
 
   tokio::select! {
     e = keeper => {
-      error!("leadership gone: {}", e.unwrap_err());
+      error!("leadership gone: {}", e?.unwrap_err());
       if let Some(pid) = child.id() {
         unsafe {
           libc::kill(pid.try_into().unwrap(), libc::SIGTERM);
