@@ -1,5 +1,6 @@
 use std::fs;
 use std::time::Duration;
+use std::convert::Infallible;
 
 use clap::Parser;
 use etcd_client as etcd;
@@ -108,7 +109,7 @@ async fn main() -> Result<()> {
 async fn lease_keeper(
   mut client: etcd::LeaseClient,
   lease_res: etcd::LeaseGrantResponse,
-) -> Result<()> {
+) -> Result<Infallible> {
   let lease = lease_res.id();
   let mut ttl = lease_res.ttl();
 
