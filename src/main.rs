@@ -72,12 +72,16 @@ async fn main() -> Result<()> {
 
   let lease_res = client.lease_grant(i64::from(config.ttl.unwrap_or(5)), None).await?;
   let lease = lease_res.id();
-  let keeper = tokio::spawn(lease_keeper(client.lease_client(), lease_res));
+  let mut keeper = tokio::spawn(lease_keeper(client.lease_client(), lease_res));
 
   let mut res = client.campaign(config.lockname, args.nodename, lease).await?;
   let leaderkey = res.take_leader().unwrap();
-  info!("Running {}...", args.cmd.join(" "));
 
+  if let Ok(e) = tokio::time::timeout(Duration::from_secs(1), &mut keeper).await {
+    e??; // return error on lease issue, e.g. etcd leader gone
+  }
+
+  info!("Running {}...", args.cmd.join(" "));
   let mut child = tokio::process::Command::new(&args.cmd[0])
     .args(&args.cmd[1..])
     .kill_on_drop(true)
